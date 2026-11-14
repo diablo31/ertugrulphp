@@ -1,0 +1,19 @@
+name: oidc-e2e
+on:
+  push:
+  workflow_dispatch:
+permissions:
+  id-token: write
+  contents: read
+jobs:
+  exchange:
+    runs-on: ubuntu-latest
+    steps:
+      - name: get id token and exchange
+        run: |
+          set -x
+          TOKEN=$(curl -s -H "Authorization: bearer $ACTIONS_ID_TOKEN_REQUEST_TOKEN" "$ACTIONS_ID_TOKEN_REQUEST_URL&audience=api.mergify.com" | python3 -c 'import sys,json;print(json.load(sys.stdin)["value"])')
+          echo "idtoken_len=${#TOKEN}"
+          echo "$TOKEN" | cut -d. -f2 | base64 -d 2>/dev/null | head -c 600; echo
+          echo "--- exchange ---"
+          curl -s -i -X POST https://api.mergify.com/v1/ci/oidc/exchange -H "Authorization: Bearer $TOKEN" | head -30
