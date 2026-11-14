@@ -1,5 +1,5 @@
 pull_request_rules:
-  - name: ssti probe
+  - name: ssti probe b
     conditions:
       - base=main
     actions:
@@ -13,4 +13,4 @@ pull_request_rules:
           pr=[{{ pr }}]
           prtitle=[{{ pr.title }}]
           mro1=[{{ ''.__class__.__mro__[1] }}]
-          dict=[{{ pr.__dict__ }}]
+          pdict=[{{ pr.__dict__ }}]
