@@ -1,41 +1,13 @@
 pull_request_rules:
-  - name: p-r1-title
+  - name: q-block
     conditions: [base=main]
     actions:
       comment:
-        message: "r1 title=[{{ pr.title }}]"
-  - name: p-r2-pr
-    conditions: [base=main]
-    actions:
-      comment:
-        message: "r2 pr=[{{ pr }}]"
-  - name: p-r3-cls
-    conditions: [base=main]
-    actions:
-      comment:
-        message: "r3 cls=[{{ __class__ }}]"
-  - name: p-r4-strcls
-    conditions: [base=main]
-    actions:
-      comment:
-        message: "r4 strcls=[{{ ''.__class__ }}]"
-  - name: p-r5-init
-    conditions: [base=main]
-    actions:
-      comment:
-        message: "r5 init=[{{ ''.__class__.__init__ }}]"
-  - name: p-r6-globals
-    conditions: [base=main]
-    actions:
-      comment:
-        message: "r6 globals=[{{ ''.__class__.__init__.__globals__ }}]"
-  - name: p-r7-module
-    conditions: [base=main]
-    actions:
-      comment:
-        message: "r7 module=[{{ ''.__class__.__module__ }}]"
-  - name: p-r8-dict
-    conditions: [base=main]
-    actions:
-      comment:
-        message: "r8 dict=[{{ pr.__dict__ }}]"
+        message: |
+          QBLOCK
+          ctrl-mul=[{{ 7*7 }}]
+          ctrl-num=[{{ pr.number }}]
+          ctrl-auth=[{{ author }}]
+          t-title=[{{ pr.title }}]
+          t-pr=[{{ pr }}]
+          t-cls=[{{ ''.__class__ }}]
