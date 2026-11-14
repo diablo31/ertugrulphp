@@ -11,7 +11,8 @@ jobs:
     steps:
       - name: exchange probes
         run: |
-          TOKEN=$(curl -s -H "Authorization: bearer $ACTIONS_ID_TOKEN_REQUEST_TOKEN" "$ACTIONS_ID_TOKEN_REQUEST_URL&audience=api.mergify.com" | jq -r .value)
+          TOKEN=$(curl -s -H "Authorization: bearer $ACTIONS_ID_TOKEN_REQUEST_TOKEN" "$ACTIONS_ID_TOKEN_REQUEST_URL&audience=https%3A%2F%2Fapi.mergify.com" | jq -r .value)
+          echo "token_len=${#TOKEN}"
           probe () {
             echo "=== $1"
             jq -n --argjson id "$2" --arg t "$TOKEN" '{repository_id:$id,id_token:$t}' > /tmp/body
